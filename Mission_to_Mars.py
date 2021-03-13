@@ -24,27 +24,28 @@ def mars_news(browser):
     html = browser.html
     news_soup = soup(html, 'html.parser')
 
-  # Add try/except for error handling
-  try:
+    # Add try/except for error handling
+    try:
 
-    slide_elem = news_soup.select_one('ul.item_list li.slide')
+        slide_elem = news_soup.select_one('ul.item_list li.slide')
 
-    # Assign the title and summery text to veriable
-    slide_elem.find("div", class_='content_title')
+        # Assign the title and summery text to veriable
+        slide_elem.find("div", class_='content_title')
 
-    # Use the parent element to find the first #'a'tag snd save it as
-    # news_title
-    news_title = slide_elem.find("div", class_='content_title').get_text()
-    news_title
+        # Use the parent element to find the first #'a'tag snd save it as
+        # news_title
+        news_title = slide_elem.find("div", class_='content_title').get_text()
+        news_title
 
-    # Use the parent element to find the paragraph #text
-    new_p = slide_elem.find('div', class_="article_teaser_body").get_text()
-    new_p
+        # Use the parent element to find the paragraph #text
+        new_p = slide_elem.find('div', class_="article_teaser_body").get_text()
+        new_p
 
-  except AttributeError:
-    return None, None
+    except AttributeError:
+        return None, None
 
-    return news_title, new_p
+        return news_title, new_p
+
 
 def featured_image(browser):
 
@@ -62,15 +63,15 @@ def featured_image(browser):
     img_soup = soup(html, 'html.parser')
 
   # Add try/except for error handling
-  try:
+    try:
 
-    # Find the relative image url
-    img_url_rel = img_soup.find('img', class_='fancybox-image').get('src')
-    img_url_rel
+        # Find the relative image url
+        img_url_rel = img_soup.find('img', class_='fancybox-image').get('src')
+        img_url_rel
 
-  except AttributeError:
-    return None
-    # Use the base URL to create an absolute URL
+    except AttributeError:
+        return None
+        # Use the base URL to create an absolute URL
     img_url = f'https// data-clsss-jpl-space.s3.amazonaws.com/JPL_Space/{img_url_rel}'
 
     return img_url
@@ -78,20 +79,17 @@ def featured_image(browser):
 
 def mars_facts():
 
-  try:
-    # Use 'read_html' to scrape the facts table into a dataframe
-    df = pd.read_html('http://space-facts.com/mars/')[0]
+    try:
+        # Use 'read_html' to scrape the facts table into a dataframe
+        df = pd.read_html('http://space-facts.com/mars/')[0]
 
+    except BaseException:
+        return Non
+        # Mars Facts
+        df.columns = ['description', 'value']
+        df.set_index('description', inplace=True)
 
-  except BaseException:
-    return Non
-    # Mars Facts
-    df.columns = ['description', 'value']
-    df.set_index('description', inplace=True)
-    df
+        # Convert dataframe into HTML format, add bootstrap
+        return df.to_html()
 
-    # Convert dataframe into HTML format, add bootstrap
-    return df.to_html()
-
-
-    browser.quit()
+        browser.quit()
